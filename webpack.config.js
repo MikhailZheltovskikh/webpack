@@ -1,14 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: path.resolve(__dirname, 'index.js'),
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
-        clean: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -16,6 +15,11 @@ module.exports = {
         }),
         new MiniCssExtractPlugin(),
     ],
+    devServer: {
+        static: path.resolve(__dirname, 'dist'),
+        port: 8080,
+        open: true,
+    },
     module: {
         rules: [
             {
@@ -37,5 +41,9 @@ module.exports = {
                 type: 'asset/resource',
             },
         ],
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [new CssMinimizerPlugin(), '...'],
     },
 };
